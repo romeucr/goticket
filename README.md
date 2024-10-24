@@ -3,6 +3,8 @@
 GOTIcket is a Chrome extension to open JIRA tickets faster.  
 ![GOTIcket options](https://github.com/romeucr/goticket/blob/master/screenshot.png)
 
+Install it from Chrome Web Store: [GOTIcket](https://chromewebstore.google.com/detail/goticket/mepagijoldbpdhmiigfppjalhejcincj) 
+
 ## Version 1.2
 - Keyboard shortcut to open the popup to digit the ticket
   - `Ctrl + Shift + J` on Windows/Linux
