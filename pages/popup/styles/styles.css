@@ -22,10 +22,10 @@ body {
     text-align: center;
 }
 
-h2 {
-    margin-bottom: 10px;
+label {
     font-size: 18px;
     color: #333;
+    font-weight: bold;
 }
 
 .project-selector-class,
