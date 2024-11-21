@@ -6,17 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GOTIcket</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <title>GOTIcket</title>
   </head>
   <body>
-    <h1>Extension Configuration</h1>
-    <form>
-      <label for="project-input">Setting 1:</label>
-      <input type="text" id="project-input" />
-      <br><br>
+    <div class="configuration-box">
+      <h1 class="config-title">GOTIcket Configuration</h1>
+      <label for="sourceList">Select the projects to preview</label>
+      <div class="dual-listbox">
+        <select id="sourceList" multiple>
+          <!-- Options will be populated -->
+        </select>
+        <div class="controls">
+          <button id="addButton">></button>
+          <button id="removeButton"><</button>
+          <button id="addAllButton">>></button>
+          <button id="removeAllButton"><<</button>
+        </div>
+        <select id="destinationList" multiple>
+          <!-- Options will be populated -->
+        </select>
+      </div>
       <button id="save-button" type="button">Save</button>
-      <button id="clear-button" type="button">Clear List</button>
-    </form>
+      <button id="clear-button" type="button">Clear Storage</button>
+    </div>
   </body>
   <script src="./scripts/script.js"></script>
 </html>

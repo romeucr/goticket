@@ -7,8 +7,40 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+}
+
+.config-title {
+    margin-bottom: 20px;
+}
+
+.configuration-box {
+    width: 800px;
+    height: 600px;
+    background-color: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.dual-listbox {
+    display: flex;
+    gap: 10px;
+}
+select {
+    width: 300px;
+    height: 300px;
+}
+.controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+button {
+    padding: 5px 10px;
+    cursor: pointer;
 }
