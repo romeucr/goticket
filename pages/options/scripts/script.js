@@ -20,24 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
     'OBVIVO - OB Novum Brasil'
   ];
 
-  chrome.storage.sync.get('projectList', (result) => {
-    if (result.projectList) {
-      projectList = result.projectList;
-    }
-  });
-
-  let selectedProjectList = [];
-  chrome.storage.sync.get('selectedProjectList', (result) => {
-    if (result.selectedProjectList) {
-      selectedProjectList = result.selectedProjectList;
-    }
-  });
+  function getUserProjectList() {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get('userProjectList', (result) => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+        resolve(result.userProjectList || []);
+      });
+    });
+  }
 
   let source = document.getElementById('sourceList');
   let destination = document.getElementById('destinationList');
 
-  populateSelectElement(source, projectList);
-  populateSelectElement(destination, selectedProjectList);
+  getUserProjectList()
+    .then((userProjectList) => {
+      populateSelectElement(source, projectList);
+      populateSelectElement(destination, userProjectList);
+    })
+    .catch((error) => {
+      console.error('Error retrieving user project list:', error);
+    });
 
   function populateSelectElement(selectElement, list) {
     list.forEach((project, index) => {
@@ -72,16 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
     moveAll(destination, source);
   });
 
-    function moveSelected(source, destination) {
-      const selectedOptions = Array.from(source.selectedOptions);
+  function moveSelected(source, destination) {
+    const selectedOptions = Array.from(source.selectedOptions);
 
-      selectedOptions.forEach(option => {
-        destination.add(option); // Move option to destination
-      });
+    selectedOptions.forEach(option => {
+      destination.add(option); // Move option to destination
+    });
 
-      // Sort both lists
-      sortLists();
-    }
+    // Sort both lists
+    sortLists();
+  }
 
   function moveAll(source, destination) {
     const allOptions = Array.from(source.options);
@@ -113,32 +117,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveButton = document.getElementById('save-button');
   saveButton.addEventListener('click', () => {
 
-        const sourceOptions = Array.from(source.options); // Convert options to an array
-        const updatedSource = sourceOptions.map(option => option.text); // Map each option to its text content
+    const sourceOptions = Array.from(source.options); // Convert options to an array
+    const updatedSource = sourceOptions.map(option => option.text); // Map each option to its text content
 
     const destinationOptions = Array.from(destination.options); // Convert options to an array
     const updatedDestinationOptions = destinationOptions.map(option => option.text); // Map each option to its text content
 
-      // Save the updated lists
-      chrome.storage.sync.set({projectList: updatedSource}, () => {
-      });
-      chrome.storage.sync.set({selectedProjectList: updatedDestinationOptions}, () => {
-      });
-
-    chrome.storage.sync.get('selectedProjectList', (result) => {
-      console.log('Updated selectedProjectList list:', result.selectedProjectList);
+    // Save the updated lists
+    chrome.storage.sync.set({userProjectList: updatedDestinationOptions}, () => {
     });
 
-    chrome.storage.sync.get('projectList', (result) => {
-      console.log('Updated project list:', result.projectList);
+    chrome.storage.sync.get('userProjectList', (result) => {
+      console.log('Updated userProjectList list:', result.userProjectList);
     });
   });
 
-
-
-
-
-
+  //TODO: clear only userProjectList
   const clearButton = document.getElementById('clear-button');
   clearButton.addEventListener('click', () => {
     chrome.storage.sync.clear(() => {
@@ -158,4 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const checkButton = document.getElementById('check-button');
+  checkButton.addEventListener('click', () => {
+
+    chrome.storage.sync.get('userProjectList', (result) => {
+      console.log('Updated userProjectList list:', result.userProjectList);
+    });
+  });
 });
