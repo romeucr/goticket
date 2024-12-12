@@ -38,4 +38,3 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 function getSelectedText() {
   return window.getSelection().toString();
 }
-

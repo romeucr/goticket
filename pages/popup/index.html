@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOTicket</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+<div class="popup">
+  <form id="ticket-form" class="ticket-form">
+    <!-- Project Selector -->
+    <div class="form-group">
+      <label for="project-selector" class="form-label">Project</label>
+      <select id="project-selector" class="project-selector" aria-label="Project Selector">
+        <!-- Options populated by JS -->
+      </select>
+    </div>
+
+    <!-- Ticket Number Input -->
+    <div class="form-group">
+      <label for="ticket-input" class="form-label">Ticket Number</label>
+      <input
+              id="ticket-input"
+              type="text"
+              class="ticket-input"
+              minlength="4"
+              maxlength="15"
+              size="15"
+              required
+              aria-label="Ticket Number Input"
+              autofocus
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+      <button id="submit-btn" class="submit-btn" type="submit" aria-label="Submit Ticket">
+        GOTI
+      </button>
+    </div>
+  </form>
+</div>
+
+<script src="./scripts/script.js"></script>
+</body>
+</html>

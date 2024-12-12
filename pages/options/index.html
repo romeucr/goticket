@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOTicket Configuration</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+<div class="configuration-box">
+  <h1 class="config-title">GOTicket Configuration</h1>
+  <label for="availableProjects" class="instruction">
+    Select the projects most used. They will become available in the search box selector.
+  </label>
+
+  <div class="dual-listbox">
+    <div class="listbox">
+      <label for="availableProjects" class="list-label">Available Projects</label>
+      <select id="availableProjects" multiple aria-label="Available Projects">
+        <!-- Options populated by JS -->
+      </select>
+    </div>
+
+    <div class="controls">
+      <button id="addButton" class="control-button" aria-label="Add selected project">></button>
+      <button id="removeButton" class="control-button" aria-label="Remove selected project"><</button>
+      <button id="addAllButton" class="control-button" aria-label="Add all projects">>></button>
+      <button id="removeAllButton" class="control-button" aria-label="Remove all projects"><<</button>
+    </div>
+
+    <div class="listbox">
+      <label for="selectedProjects" class="list-label">Selected Projects</label>
+      <select id="selectedProjects" multiple aria-label="Selected Projects">
+        <!-- Options populated by JS -->
+      </select>
+    </div>
+  </div>
+
+  <p class="note">
+    * When using the search box you can inform any ticket whose project is not listed, like ABCD-1234. The search tool
+    will open the ticket if it exists.
+  </p>
+</div>
+
+<script src="./scripts/script.js"></script>
+</body>
+</html>
