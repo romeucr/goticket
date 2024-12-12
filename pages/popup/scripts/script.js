@@ -52,7 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     chrome.tabs.query({ url }, (tabs) => {
       if (tabs.length > 0) {
-        chrome.tabs.update(tabs[0].id, { active: true });
+        const tabToFocus = tabs[0];
+        chrome.windows.update(tabToFocus.windowId, { focused: true });
+        chrome.tabs.update(tabToFocus.id, { highlighted: true });
       } else {
         chrome.tabs.create({ url });
       }
