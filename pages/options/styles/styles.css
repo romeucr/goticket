@@ -1,46 +1,142 @@
+/* Reset and Box Sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body Styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
+/* Configuration Box Styling */
+.configuration-box {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    height: 600px;
+    text-align: center;
+}
+
+/* Title Styling */
 .config-title {
+    font-size: 24px;
+    color: #333333;
     margin-bottom: 20px;
 }
 
-.configuration-box {
-    width: 800px;
-    height: 600px;
-    background-color: white;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 8px;
+/* Instruction Label */
+.instruction {
+    font-size: 16px;
+    color: #555555;
+    margin-bottom: 20px;
+    display: block;
 }
 
+/* Dual Listbox Container */
 .dual-listbox {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
+
+/* Listbox Styling */
+.listbox {
+    width: 45%;
+    text-align: left;
+}
+
+/* Listbox Label Styling */
+.list-label {
+    font-size: 16px;
+    color: #333333;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Select Box Styling */
 select {
-    width: 300px;
+    width: 100%;
     height: 300px;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #333333;
 }
+
+/* Controls Button Container */
 .controls {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 10px;
+    align-items: center;
+    gap: 15px;
 }
-button {
-    padding: 5px 10px;
+
+/* Control Button Styling */
+.control-button {
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+    color: #333333;
+    background-color: #f0f0f0;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover Effects for Control Buttons */
+.control-button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1);
+}
+
+/* Note Paragraph Styling */
+.note {
+    font-size: 14px;
+    color: #777777;
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* Responsive Styles for Smaller Screens */
+@media (max-width: 480px) {
+    .configuration-box {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+    }
+
+    .dual-listbox {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .listbox {
+        width: 100%;
+    }
+
+    .controls {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    .control-button {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
 }

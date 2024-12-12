@@ -1,60 +1,80 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
+  const projectSelector = document.getElementById("project-selector");
+  const ticketInput = document.getElementById("ticket-input");
+  const submitButton = document.getElementById("submit-btn");
 
-  function getUserProjectList() {
-    return new Promise((resolve, reject) => {
-      chrome.storage.sync.get('userProjectList', (result) => {
-        if (chrome.runtime.lastError) {
-          return reject(chrome.runtime.lastError);
-        }
-        resolve(result.userProjectList || []);
+  // Fetch the user's project list from Chrome storage
+  async function getUserProjectList() {
+    try {
+      return await new Promise((resolve, reject) => {
+        chrome.storage.sync.get("userProjectList", (data) => {
+          if (chrome.runtime.lastError) {
+            return reject(chrome.runtime.lastError);
+          }
+          resolve(data.userProjectList || []);
+        });
       });
+    } catch (error) {
+      console.error("Error retrieving user project list:", error);
+      return [];
+    }
+  }
+
+  // Populate the project selector dropdown
+  async function populateProjectSelector() {
+    const userProjectList = await getUserProjectList();
+
+    userProjectList.forEach((project, index) => {
+      const option = document.createElement("option");
+      const projectName = project.split(" - ")[0]; // Extract the first part before " - "
+
+      option.value = projectName;
+      option.text = projectName;
+      if (index === 0) {
+        option.selected = true;
+      }
+
+      projectSelector.appendChild(option);
     });
   }
 
-  getUserProjectList()
-    .then((userProjectList) => {
-      userProjectList.forEach((project, index) => {
-        const option = document.createElement('option');
-        let projectNameSplit = project.split(" - ")[0]; // Split by " - " and take the first part
-        option.value = projectNameSplit;
-        option.text = projectNameSplit;
-        if (index === 0) {
-          option.selected = true;
-        }
-        let projectSelector = document.getElementById('project-selector');
-
-        projectSelector.appendChild(option);
-      });
-    })
-    .catch((error) => {
-      console.error('Error retrieving user project list:', error);
-    });
-
+  // Open a Jira ticket in a new or existing tab
   function openJiraTicket() {
-    const projectName = document.getElementById("project-selector").value;
-    const ticketNumber = document.getElementById("ticket-input").value.trim();
+    const projectName = projectSelector.value;
+    const ticketNumber = ticketInput.value.trim();
+    const isNumericTicket = /^\d+$/.test(ticketNumber);
 
-    const ticketContainsOnlyNumber = /^\d+$/.test(ticketNumber);
+    const url = `https://jira.tid.es/browse/${
+      isNumericTicket ? `${projectName}-${ticketNumber}` : ticketNumber
+    }`;
 
-    const url = `https://jira.tid.es/browse/${ticketContainsOnlyNumber ? projectName + "-" + ticketNumber : ticketNumber}`;
-
-    chrome.tabs.query({url: url}, (tabs) => {
+    chrome.tabs.query({ url }, (tabs) => {
       if (tabs.length > 0) {
-        chrome.tabs.update(tabs[0].id, {active: true});
+        chrome.tabs.update(tabs[0].id, { active: true });
       } else {
-        chrome.tabs.create({url: url});
+        chrome.tabs.create({ url });
       }
     });
   }
 
-  document.getElementById('submit-btn').onclick = openJiraTicket;
+  // Attach event listeners
+  function attachEventListeners() {
+    submitButton.addEventListener("click", openJiraTicket);
 
-  document.getElementById('ticket-input').addEventListener('keyup', function (event) {
-    if (event.keyCode === 13) {
-      openJiraTicket();
-    }
-  });
+    ticketInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        openJiraTicket();
+      }
+    });
+  }
 
+  // Initialize the script
+  function init() {
+    populateProjectSelector();
+    attachEventListeners();
+  }
+
+  init();
 });

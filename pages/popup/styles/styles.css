@@ -1,9 +1,11 @@
+/* Reset and Box Sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body Styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -13,8 +15,9 @@ body {
     height: 100vh;
 }
 
+/* Popup Container */
 .popup {
-    background-color: white;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -22,37 +25,55 @@ body {
     text-align: center;
 }
 
-label {
-    font-size: 18px;
-    color: #333;
-    font-weight: bold;
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
 }
 
-.project-selector-class,
-.ticket-input-class {
+/* Label Styling */
+.form-label {
+    font-size: 16px;
+    color: #333333;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Project Selector */
+.project-selector {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
     font-size: 16px;
+    background-color: #ffffff;
 }
 
-.ticket-input-class {
+/* Ticket Input */
+.ticket-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 16px;
     text-align: center;
+    background-color: #ffffff;
 }
 
-.submit-btn-class {
+/* Submit Button */
+.submit-btn {
     padding: 10px 20px;
     background-color: #4CAF50;
-    color: white;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-.submit-btn-class:hover {
+.submit-btn:hover {
     background-color: #45a049;
 }

@@ -1,26 +1,26 @@
-// Attach the event listener after the DOM has loaded
+"use strict";
+
 document.addEventListener('DOMContentLoaded', () => {
-  let projectList = [
-    'ANLT - Analytics',
-    'ANDROID - Android',
-    'APPS - Apps Core',
-    'CHECKOUT - Checkout',
-    'CMS - CMS',
-    'TGT - Commercial Tech',
-    'ACCOUNT - Customer Account',
-    'IR - Incident Report',
-    'IOS - iOS',
-    'LOC - Localization',
-    'NOC - NOC',
-    'SERVER - Novum Server Core',
-    'VIVO - Novum Vivo Brasil',
-    'NOVUMCC - NOVUMCC',
-    'PAP - PAP',
-    'QANOV - QA Novum',
-    'OBVIVO - OB Novum Brasil'
+
+  const projectList = [
+    'ANLT - Analytics', 'ANDROID - Android', 'APPS - Apps Core',
+    'CHECKOUT - Checkout', 'CMS - CMS', 'TGT - Commercial Tech',
+    'ACCOUNT - Customer Account', 'IR - Incident Report', 'IOS - iOS',
+    'LOC - Localization', 'NOC - NOC', 'SERVER - Novum Server Core',
+    'VIVO - Novum Vivo Brasil', 'NOVUMCC - NOVUMCC', 'PAP - PAP',
+    'QANOV - QA Novum', 'OBVIVO - OB Novum Brasil'
   ];
 
-  function getUserProjectList() {
+  const source = document.getElementById('availableProjects');
+  const destination = document.getElementById('selectedProjects');
+  const buttons = {
+    add: document.getElementById('addButton'),
+    addAll: document.getElementById('addAllButton'),
+    remove: document.getElementById('removeButton'),
+    removeAll: document.getElementById('removeAllButton'),
+  };
+
+  async function getUserProjectList() {
     return new Promise((resolve, reject) => {
       chrome.storage.sync.get('userProjectList', (result) => {
         if (chrome.runtime.lastError) {
@@ -31,108 +31,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  let source = document.getElementById('availableProjects');
-  let destination = document.getElementById('selectedProjects');
+  async function initializeProjectLists() {
+    try {
+      const userProjectList = await getUserProjectList();
+      const availableProjects = projectList.filter(project => !userProjectList.includes(project));
 
-  getUserProjectList()
-    .then((userProjectList) => {
-
-      // remove from projectList the projects that are already in userProjectList
-      userProjectList.forEach((project) => {
-        if (projectList.includes(project)) {
-          projectList = projectList.filter((item) => item !== project);
-        }
-      });
-
-      populateSelectElement(source, projectList);
+      populateSelectElement(source, availableProjects);
       populateSelectElement(destination, userProjectList);
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error retrieving user project list:', error);
-    });
+    }
+  }
 
   function populateSelectElement(selectElement, list) {
+    selectElement.innerHTML = '';
     list.forEach((project, index) => {
       const option = document.createElement('option');
-      option.value = project.split(" - ")[0]; // Split by " - " and take the first part
+      option.value = project.split(' - ')[0];
       option.text = project;
-      if (index === 0) {
-        option.selected = true;
-      }
-      selectElement.appendChild(option);
+      if (index === 0) option.selected = true;
+      selectElement.add(option);
     });
   }
 
-  const addButton = document.getElementById('addButton');
-  const addAllButton = document.getElementById('addAllButton');
-  const removeButton = document.getElementById('removeButton');
-  const removeAllButton = document.getElementById('removeAllButton');
-
-  addButton.addEventListener('click', () => {
-    moveSelected(source, destination);
-    saveSelectedList()
-  });
-
-  removeButton.addEventListener('click', () => {
-    moveSelected(destination, source);
-    saveSelectedList()
-  });
-
-  addAllButton.addEventListener('click', () => {
-    moveAll(source, destination);
-    saveSelectedList()
-  });
-
-  removeAllButton.addEventListener('click', () => {
-    moveAll(destination, source);
-    saveSelectedList()
-  });
-
-  function moveSelected(source, destination) {
-    const selectedOptions = Array.from(source.selectedOptions);
-
-    selectedOptions.forEach(option => {
-      destination.add(option); // Move option to destination
+  function moveSelected(sourceElement, destinationElement) {
+    Array.from(sourceElement.selectedOptions).forEach(option => {
+      destinationElement.add(option);
     });
-
-    // Sort both lists
     sortLists();
   }
 
-  function moveAll(source, destination) {
-    const allOptions = Array.from(source.options);
-
-    // Move all options to the destination
-    allOptions.forEach(option => {
-      destination.add(option);
+  function moveAll(sourceElement, destinationElement) {
+    Array.from(sourceElement.options).forEach(option => {
+      destinationElement.add(option);
     });
-
-    // Sort both lists
     sortLists();
   }
 
   function sortLists() {
-    const sourceOptions = Array.from(source.options);
-    const destinationOptions = Array.from(destination.options);
-
-    // Sort options alphabetically by text content
-    sourceOptions.sort((a, b) => a.value.localeCompare(b.value));
-    destinationOptions.sort((a, b) => a.value.localeCompare(b.value));
-
-    // Clear the list and re-add sorted options
-    source.innerHTML = "";
-    destination.innerHTML = "";
-    sourceOptions.forEach(option => source.add(option));
-    destinationOptions.forEach(option => destination.add(option));
-  }
-
-  function saveSelectedList() {
-    const destinationOptions = Array.from(destination.options); // Convert options to an array
-    const updatedDestinationOptions = destinationOptions.map(option => option.text); // Map each option to its text content
-
-    // Save the updated lists
-    chrome.storage.sync.set({userProjectList: updatedDestinationOptions}, () => {
+    [source, destination].forEach(element => {
+      const options = Array.from(element.options);
+      options.sort((a, b) => a.value.localeCompare(b.value));
+      element.innerHTML = '';
+      options.forEach(option => element.add(option));
     });
   }
 
+  function saveSelectedList() {
+    const updatedList = Array.from(destination.options).map(option => option.text);
+    chrome.storage.sync.set({userProjectList: updatedList}, () => {
+      console.log('User project list saved.');
+    });
+  }
+
+  function attachEventListeners() {
+    buttons.add.addEventListener('click', () => {
+      moveSelected(source, destination);
+      saveSelectedList();
+    });
+
+    buttons.remove.addEventListener('click', () => {
+      moveSelected(destination, source);
+      saveSelectedList();
+    });
+
+    buttons.addAll.addEventListener('click', () => {
+      moveAll(source, destination);
+      saveSelectedList();
+    });
+
+    buttons.removeAll.addEventListener('click', () => {
+      moveAll(destination, source);
+      saveSelectedList();
+    });
+  }
+
+  // Initialize
+  initializeProjectLists();
+  attachEventListeners();
 });
