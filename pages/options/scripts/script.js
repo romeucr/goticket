@@ -31,11 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  let source = document.getElementById('sourceList');
-  let destination = document.getElementById('destinationList');
+  let source = document.getElementById('availableProjects');
+  let destination = document.getElementById('selectedProjects');
 
   getUserProjectList()
     .then((userProjectList) => {
+
+      // remove from projectList the projects that are already in userProjectList
+      userProjectList.forEach((project) => {
+        if (projectList.includes(project)) {
+          projectList = projectList.filter((item) => item !== project);
+        }
+      });
+
       populateSelectElement(source, projectList);
       populateSelectElement(destination, userProjectList);
     })
@@ -62,18 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   addButton.addEventListener('click', () => {
     moveSelected(source, destination);
+    saveSelectedList()
   });
 
   removeButton.addEventListener('click', () => {
     moveSelected(destination, source);
+    saveSelectedList()
   });
 
   addAllButton.addEventListener('click', () => {
     moveAll(source, destination);
+    saveSelectedList()
   });
 
   removeAllButton.addEventListener('click', () => {
     moveAll(destination, source);
+    saveSelectedList()
   });
 
   function moveSelected(source, destination) {
@@ -114,49 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
     destinationOptions.forEach(option => destination.add(option));
   }
 
-  const saveButton = document.getElementById('save-button');
-  saveButton.addEventListener('click', () => {
-
-    const sourceOptions = Array.from(source.options); // Convert options to an array
-    const updatedSource = sourceOptions.map(option => option.text); // Map each option to its text content
-
+  function saveSelectedList() {
     const destinationOptions = Array.from(destination.options); // Convert options to an array
     const updatedDestinationOptions = destinationOptions.map(option => option.text); // Map each option to its text content
 
     // Save the updated lists
     chrome.storage.sync.set({userProjectList: updatedDestinationOptions}, () => {
     });
+  }
 
-    chrome.storage.sync.get('userProjectList', (result) => {
-      console.log('Updated userProjectList list:', result.userProjectList);
-    });
-  });
-
-  //TODO: clear only userProjectList
-  const clearButton = document.getElementById('clear-button');
-  clearButton.addEventListener('click', () => {
-    chrome.storage.sync.clear(() => {
-      if (chrome.runtime.lastError) {
-        console.error('Error clearing sync storage:', chrome.runtime.lastError);
-      } else {
-        console.log('Sync storage cleared.');
-      }
-    });
-
-    chrome.storage.local.clear(() => {
-      if (chrome.runtime.lastError) {
-        console.error('Error clearing local storage:', chrome.runtime.lastError);
-      } else {
-        console.log('Local storage cleared.');
-      }
-    });
-  });
-
-  const checkButton = document.getElementById('check-button');
-  checkButton.addEventListener('click', () => {
-
-    chrome.storage.sync.get('userProjectList', (result) => {
-      console.log('Updated userProjectList list:', result.userProjectList);
-    });
-  });
 });

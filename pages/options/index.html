@@ -10,10 +10,10 @@
   <body>
     <div class="configuration-box">
       <h1 class="config-title">GOTIcket Configuration</h1>
-      <label for="sourceList">Select the projects most used. They will become available on the search box selector</label>
+      <label for="availableProjects">Select the projects most used. They will become available on the search box selector</label>
       <div class="dual-listbox">
-        <select id="sourceList" multiple>
-          <!-- Options will be populated -->
+        <select id="availableProjects" multiple>
+          <!-- Options populated by JS-->
         </select>
         <div class="controls">
           <button id="addButton">></button>
@@ -21,14 +21,10 @@
           <button id="addAllButton">>></button>
           <button id="removeAllButton"><<</button>
         </div>
-        <select id="destinationList" multiple>
-          <!-- Options will be populated -->
+        <select id="selectedProjects" multiple>
+          <!-- Options populated by JS-->
         </select>
       </div>
-      <button id="save-button" type="button">Save</button>
-      <button id="clear-button" type="button">Clear Storage</button>
-      <button id="check-button" type="button">Check Storage</button>
-
       <p>*Remenber: When using the search box you can inform any ticket whose project is not listed here. The search tool will open the ticket if it exists.</p>
     </div>
   </body>
