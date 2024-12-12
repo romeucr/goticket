@@ -16,7 +16,7 @@
         "default": "Alt+Shift+J",
         "mac": "Command+J"
       },
-      "description": "Start the extension"
+      "description": "Open extension popup"
     }
   },
   "action": {
